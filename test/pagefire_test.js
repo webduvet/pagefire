@@ -27,15 +27,52 @@ var PageFire = require('../lib/pagefire.js');
  * TODO maybe to put this into some test settings
  * to avoid refering to my test account :)
  */
-var test_ref = new Firebase('https://sagavera.firebaseio.com');
+var test_ref = new Firebase('https://sagavera.firebaseio.com/pageFireTest');
+
+var PageFireTests;
+
+var testData = [
+	{name:"Eric", surname:"Cartman"},
+	{name:"Kenny", surname:"McCormicn"},
+	{name:"Kyle", surname:"Broflowski"},
+	{name:"Stan", surname:"March"},
+	{name:"Herbert", surname:"Garisson"},
+	{name:"Butters", surname:"Stotch"},
+	{name:"Wendy", surname:"Testaburger"},
+	{name:"Token", surname:"Black"},
+	{name:"Babe", surname:"Stevensen"}
+	];
+
+var testItem = 3;
+
+
+
+function init(cb){
+	test_ref.remove(function(){
+		var counter = testData.length;
+		testData.forEach(function(item){
+			var item_ref = test_ref.push(item,function(obj){
+				counter--;
+				if (counter === 0 ) {
+					cb();
+				}
+			});
+			console.log(item_ref.name());
+			//item_ref.on('child_added', function(c){
+			//	console.log(c.val());
+			//});
+		});
+	});
+}
 
 
 module.exports = {
   'test PageFire': {
     'setUp': function(done) {
       // setup here
-      console.log('some setup shite');
-      done();
+			init(function(){
+				done();
+			});
     },
 
     'do we have the firebase reference?': function(test) {
