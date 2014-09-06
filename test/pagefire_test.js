@@ -1,6 +1,7 @@
 'use strict';
 
-var pagefire = require('../lib/pagefire.js');
+var Firebase = require('firebase');
+var PageFire = require('../lib/pagefire.js');
 
 /*
   ======== A Handy Little Nodeunit Reference ========
@@ -22,15 +23,27 @@ var pagefire = require('../lib/pagefire.js');
     test.ifError(value)
 */
 
-exports['awesome'] = {
-  setUp: function(done) {
-    // setup here
-    done();
-  },
-  'no args': function(test) {
-    test.expect(1);
-    // tests here
-    test.equal(pagefire.awesome(), 'awesome', 'should be awesome.');
-    test.done();
-  },
+/**
+ * TODO maybe to put this into some test settings
+ * to avoid refering to my test account :)
+ */
+var test_ref = new Firebase('https://sagavera.firebaseio.com');
+
+
+module.exports = {
+  'test PageFire': {
+    'setUp': function(done) {
+      // setup here
+      console.log('some setup shite');
+      done();
+    },
+
+    'do we have the firebase reference?': function(test) {
+      test.expect(1);
+      var paginate = new(PageFire)(test_ref);
+      test.ok(!!paginate, "expcting new reference to JobbrAdminFire instance");
+      test.done();
+    },
+
+  }
 };
