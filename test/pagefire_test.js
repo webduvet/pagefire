@@ -60,7 +60,7 @@ function init(cb){
 				}
 			});
 			allIds.push(item_ref.name());
-			console.log(item_ref.name());
+			//console.log(item_ref.name());
 			//item_ref.on('child_added', function(c){
 			//	console.log(c.val());
 			//});
@@ -78,17 +78,17 @@ module.exports = {
 			});
     },
 
-    'need to instantiate it properly': function(test) {
+    'pageFire to contain valid firebase reference': function(test) {
       test.expect(1);
       var paginate = new(PageFire)(test_ref);
-      test.ok(!!paginate, "expcting new reference to JobbrAdminFire instance");
+      test.ok(paginate._ref instanceof Firebase, "expcting new reference to JobbrAdminFire instance");
       test.done();
     },
 
-		'testing get user by user id': function(test) {
+		'instantiate pagefire with ._newest pointing to correct name': function(test) {
 			test.expect(1);
       var paginate = new(PageFire)(test_ref);
-			console.log('getting this one', allIds[1]);
+			/*
 			test_ref
 				.child(allIds[1])
 				.once('value', function(ss){
@@ -96,6 +96,12 @@ module.exports = {
 					test.equals(ss.val().name, testData[1].name, "expecting '" + testData[1].name + "' and got '"+  ss.val().name + "'");
 					test.done();
 				});
+				*/
+			paginate.init(function(){
+				test.equals(paginate._newest, allIds[allIds.length-1], "expecting the newest key in the list, got this: " + paginate._newest);	
+				test.done();
+			});
+			
 		}
   }
 };
