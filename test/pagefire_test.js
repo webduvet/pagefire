@@ -43,20 +43,23 @@ var testData = [
 	{name:"Babe", surname:"Stevensen"}
 	];
 
-var testItem = 3;
+var testItem = 1; //looking to get Kenny McCormic, this will be replaced with auto_id string
 
+var allIds = new(Array);  // this is going to hold all new test IDs
 
 
 function init(cb){
 	test_ref.remove(function(){
 		var counter = testData.length;
-		testData.forEach(function(item){
+		allIds = new(Array);
+		testData.forEach(function(item,index){
 			var item_ref = test_ref.push(item,function(obj){
 				counter--;
 				if (counter === 0 ) {
 					cb();
 				}
 			});
+			allIds.push(item_ref.name());
 			console.log(item_ref.name());
 			//item_ref.on('child_added', function(c){
 			//	console.log(c.val());
@@ -75,12 +78,24 @@ module.exports = {
 			});
     },
 
-    'do we have the firebase reference?': function(test) {
+    'need to instantiate it properly': function(test) {
       test.expect(1);
       var paginate = new(PageFire)(test_ref);
       test.ok(!!paginate, "expcting new reference to JobbrAdminFire instance");
       test.done();
     },
 
+		'testing get user by user id': function(test) {
+			test.expect(1);
+      var paginate = new(PageFire)(test_ref);
+			console.log('getting this one', allIds[1]);
+			test_ref
+				.child(allIds[1])
+				.once('value', function(ss){
+					console.log(ss.val());
+					test.equals(ss.val().name, testData[1].name, "expecting '" + testData[1].name + "' and got '"+  ss.val().name + "'");
+					test.done();
+				});
+		}
   }
 };
