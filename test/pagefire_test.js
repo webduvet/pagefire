@@ -34,12 +34,20 @@ var PageFireTests;
 var testData = [
 	{name:"Eric", surname:"Cartman"},
 	{name:"Kenny", surname:"McCormicn"},
-	{name:"Kyle", surname:"Broflowski"},
-	{name:"Stan", surname:"March"},
+	{name:"Kyle", surname:"Broflovski"},
+	{name:"Gerald", surname:"Broflovski"},
+	{name:"Sheila", surname:"Broflovski"},
+	{name:"Ike", surname:"Broflovski"},
+	{name:"Stan", surname:"Marsh"},
 	{name:"Herbert", surname:"Garisson"},
 	{name:"Butters", surname:"Stotch"},
 	{name:"Wendy", surname:"Testaburger"},
 	{name:"Token", surname:"Black"},
+	{name:"Randy", surname:"Marsh"},
+	{name:"Sharon", surname:"Marsh"},
+	{name:"Jimy", surname:"Valmer"},
+	{name:"Timmy", surname:"Burch"},
+	{name:"Clyde", surname:"Donovan"},
 	{name:"Babe", surname:"Stevensen"}
 	];
 
@@ -101,7 +109,20 @@ module.exports = {
 				test.equals(paginate._newest, allIds[allIds.length-1], "expecting the newest key in the list, got this: " + paginate._newest);	
 				test.done();
 			});
-			
+		}
+
+		'get first page' : function(test) {
+			test.expect(1);
+			var paginate = new(PageFire)(test_ref);
+			paginate.init(function(paginator){
+				//TODO
+				//here we have the initialized paginator.
+				paginator.first(function(result){
+					// here we have the first page
+					// TODO get rid of this callback hell
+					test.done();
+				});
+			});
 		}
   }
 };
