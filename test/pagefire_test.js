@@ -30,6 +30,7 @@ var PageFire = require('../lib/pagefire.js');
 var test_ref = new Firebase('https://sagavera.firebaseio.com/pageFireTest');
 
 var PageFireTests;
+var PAGE_SIZE = 5;
 
 var testData = [
 	{name:"Eric", surname:"Cartman"},
@@ -87,43 +88,40 @@ module.exports = {
     },
 
     'pageFire to contain valid firebase reference': function(test) {
-      test.expect(1);
+      test.expect(2);
       var paginate = new(PageFire)(test_ref);
       test.ok(paginate._ref instanceof Firebase, "expcting new reference to JobbrAdminFire instance");
+			test.equals(paginate._pageSize, PAGE_SIZE, "incorrect config for pageSize");
       test.done();
     },
 
 		'instantiate pagefire with ._newest pointing to correct name': function(test) {
 			test.expect(1);
       var paginate = new(PageFire)(test_ref);
-			/*
-			test_ref
-				.child(allIds[1])
-				.once('value', function(ss){
-					console.log(ss.val());
-					test.equals(ss.val().name, testData[1].name, "expecting '" + testData[1].name + "' and got '"+  ss.val().name + "'");
+
+			paginate
+				.init()
+				.on('ready', function(paginate){
+					test.equals(paginate._newest, allIds[allIds.length-1], "expecting the newest key in the list, got this: " + paginate._newest);	
 					test.done();
 				});
-				*/
-			paginate.init(function(){
-				test.equals(paginate._newest, allIds[allIds.length-1], "expecting the newest key in the list, got this: " + paginate._newest);	
-				test.done();
-			});
 		},
 
 		'get first page' : function(test) {
-			test.expect(1);
-			var paginate = new(PageFire)(test_ref);
-			process.exit = test.done;
-			paginate.init(function(paginator){
-				//TODO
-				//here we have the initialized paginator.
-				paginator.first(function(result){
-					// here we have the first page
-					// TODO get rid of this callback hell
-					//test.done();
+			test.expect(4);
+			var paginate = new(PageFire)(test_ref, PAGE_SIZE);
+			paginate
+				.init()
+				.on('ready', function(paginate){
+					paginate.first(function(result){
+						var keys = Object.keys(result);
+						test.ok(typeof result === 'object', "expecting object");
+						test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
+						test.equals(result[keys[PAGE_SIZE-1]].surname, testData[testData.length-1].surname, "expecting the newest item be the first item in the list");
+						test.equals(result[keys[0]].surname, testData[testData.length-1-5].surname, "the last item on page is the fith item from the first");
+						test.done();
+					});
 				});
-			});
 		}
   }
 };
