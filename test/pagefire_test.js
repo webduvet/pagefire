@@ -109,18 +109,19 @@ module.exports = {
 				test.equals(paginate._newest, allIds[allIds.length-1], "expecting the newest key in the list, got this: " + paginate._newest);	
 				test.done();
 			});
-		}
+		},
 
 		'get first page' : function(test) {
 			test.expect(1);
 			var paginate = new(PageFire)(test_ref);
+			process.exit = test.done;
 			paginate.init(function(paginator){
 				//TODO
 				//here we have the initialized paginator.
 				paginator.first(function(result){
 					// here we have the first page
 					// TODO get rid of this callback hell
-					test.done();
+					//test.done();
 				});
 			});
 		}
