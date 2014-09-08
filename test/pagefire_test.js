@@ -119,6 +119,16 @@ module.exports = {
 						test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
 						test.equals(result[keys[PAGE_SIZE-1]].surname, testData[testData.length-1].surname, "expecting the newest item be the first item in the list");
 						test.equals(result[keys[0]].surname, testData[testData.length-1-5].surname, "the last item on page is the fith item from the first");
+
+						paginate.next(function(result){
+							var keys = Object.keys(result);
+							test.ok(typeof result === 'object', "expecting object");
+							test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
+							test.equals(result[keys[PAGE_SIZE-1 + PAGE_SIZE]].surname, testData[testData.length-1 + PAGE_SIZE].surname, "expecting the newest item be the first item in the list");
+							test.equals(result[keys[+PAGE_SIZE]].surname, testData[testData.length-1-PAGE_SIZE].surname, "the last item on page is the fith item from the first");
+
+						});
+
 						test.done();
 					});
 				});
