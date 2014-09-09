@@ -108,7 +108,7 @@ module.exports = {
 		},
 
 		'test get first page, get nextPage and get Previous Page' : function(test) {
-			test.expect(8);
+			test.expect(12);
 			var paginate = new(PageFire)(test_ref, PAGE_SIZE);
 			paginate
 				.init()
