@@ -30,7 +30,7 @@ var PageFire = require('../lib/pagefire.js');
 var test_ref = new Firebase('https://sagavera.firebaseio.com/pageFireTest');
 
 var PageFireTests;
-var PAGE_SIZE = 5;
+var PAGE_SIZE = 5, NEW_ITEMS = PAGE_SIZE -1;
 
 var testData = [
 	{name:"Eric", surname:"Cartman"},
@@ -39,13 +39,13 @@ var testData = [
 	{name:"Gerald", surname:"Broflovski"},
 	{name:"Sheila", surname:"Broflovski"},
 	{name:"Ike", surname:"Broflovski"},
-	{name:"Stan", surname:"Marsh"},
+	{name:"Stan", surname:"Marsh jr"},
 	{name:"Herbert", surname:"Garisson"},
 	{name:"Butters", surname:"Stotch"},
 	{name:"Wendy", surname:"Testaburger"},
 	{name:"Token", surname:"Black"},
-	{name:"Randy", surname:"Marsh"},
-	{name:"Sharon", surname:"Marsh"},
+	{name:"Randy", surname:"Marsh Ra"},
+	{name:"Sharon", surname:"Marsh Sh"},
 	{name:"Jimy", surname:"Valmer"},
 	{name:"Timmy", surname:"Burch"},
 	{name:"Clyde", surname:"Donovan"},
@@ -107,8 +107,8 @@ module.exports = {
 				});
 		},
 
-		'get first page' : function(test) {
-			test.expect(4);
+		'test get first page, get nextPage and get Previous Page' : function(test) {
+			test.expect(8);
 			var paginate = new(PageFire)(test_ref, PAGE_SIZE);
 			paginate
 				.init()
@@ -118,18 +118,26 @@ module.exports = {
 						test.ok(typeof result === 'object', "expecting object");
 						test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
 						test.equals(result[keys[PAGE_SIZE-1]].surname, testData[testData.length-1].surname, "expecting the newest item be the first item in the list");
-						test.equals(result[keys[0]].surname, testData[testData.length-1-5].surname, "the last item on page is the fith item from the first");
+						test.equals(result[keys[0]].surname, testData[testData.length -1 - NEW_ITEMS].surname, "the last item on page is the fith item from the first");
 
 						paginate.next(function(result){
 							var keys = Object.keys(result);
 							test.ok(typeof result === 'object', "expecting object");
 							test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
-							test.equals(result[keys[PAGE_SIZE-1 + PAGE_SIZE]].surname, testData[testData.length-1 + PAGE_SIZE].surname, "expecting the newest item be the first item in the list");
-							test.equals(result[keys[+PAGE_SIZE]].surname, testData[testData.length-1-PAGE_SIZE].surname, "the last item on page is the fith item from the first");
+							test.equals(result[keys[PAGE_SIZE-1]].surname, testData[testData.length - 1 - NEW_ITEMS].surname, "expecting the newest item from next page  be the first item in the list");
+							test.equals(result[keys[0]].surname, testData[testData.length-1 - 2*NEW_ITEMS].surname, "the last item on next page is the fith item from the first");
 
+							paginate.previous(function(result){
+								var keys = Object.keys(result);
+								test.ok(typeof result === 'object', "expecting object");
+								test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
+								test.equals(result[keys[PAGE_SIZE-1]].surname, testData[testData.length-1].surname, "expecting the newest item be the first item in the list");
+								test.equals(result[keys[0]].surname, testData[testData.length -1 - NEW_ITEMS].surname, "the last item on page is the fith item from the first");
+
+								test.done();
+							});
 						});
 
-						test.done();
 					});
 				});
 		}
