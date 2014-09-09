@@ -30,6 +30,8 @@ var PageFire = require('../lib/pagefire.js');
 var test_ref = new Firebase('https://sagavera.firebaseio.com/pageFireTest');
 
 var PageFireTests;
+//TODO - fix the following
+// make sure PAGE_SIZE is small enough to have at least 2 pages in testing set. otherwise the dest will fail
 var PAGE_SIZE = 5, NEW_ITEMS = PAGE_SIZE -1;
 
 var testData = [
@@ -89,8 +91,8 @@ module.exports = {
 
     'pageFire to contain valid firebase reference': function(test) {
       test.expect(2);
-      var paginate = new(PageFire)(test_ref);
-      test.ok(paginate._ref instanceof Firebase, "expcting new reference to JobbrAdminFire instance");
+      var paginate = new(PageFire)(test_ref, PAGE_SIZE);
+      test.ok(paginate._ref instanceof Firebase, "expecting new reference to JobbrAdminFire instance");
 			test.equals(paginate._pageSize, PAGE_SIZE, "incorrect config for pageSize");
       test.done();
     },
@@ -137,6 +139,35 @@ module.exports = {
 								test.done();
 							});
 						});
+
+					});
+				});
+		},
+
+		'test getting to the last possoble page': function(test) {
+			test.expect(1);
+			var paginate = new(PageFire)(test_ref, PAGE_SIZE);
+			paginate
+				.init()
+				.on('ready', function(paginate){
+					paginate.first(function(result){
+
+						var modulo = testData.length % NEW_ITEMS;
+						var func = function(obj){
+							obj.next(function(result){
+								var keys = Object.keys(result);
+								console.log(keys.length, PAGE_SIZE);
+								if (keys.length == PAGE_SIZE ) {
+									console.log("another next");
+									func(obj);
+								} else {
+									test.ok(keys.length == modulo, "should be on page '" + modulo + "' items and got " + keys.length);
+									test.done();
+								}
+							});
+						};
+
+						func(paginate);
 
 					});
 				});
