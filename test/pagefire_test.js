@@ -144,7 +144,7 @@ module.exports = {
 				});
 		},
 
-		'test getting to the last possoble page': function(test) {
+		'test getting to the last possible page': function(test) {
 			test.expect(1);
 			var paginate = new(PageFire)(test_ref, PAGE_SIZE);
 			paginate
@@ -153,12 +153,12 @@ module.exports = {
 					paginate.first(function(result){
 
 						var modulo = testData.length % NEW_ITEMS;
+
 						var func = function(obj){
 							obj.next(function(result){
 								var keys = Object.keys(result);
-								console.log(keys.length, PAGE_SIZE);
+								//console.log(keys.length, PAGE_SIZE);
 								if (keys.length == PAGE_SIZE ) {
-									console.log("another next");
 									func(obj);
 								} else {
 									test.ok(keys.length == modulo, "should be on page '" + modulo + "' items and got " + keys.length);
@@ -173,16 +173,16 @@ module.exports = {
 				});
 		},
 
-		'test isOnFirstPaage isOnLastPage methods': function(test) {
+		'test onFirstPage onLastPage methods': function(test) {
 			test.expect(2);
 			var paginate = new(PageFire)(test_ref, PAGE_SIZE);
 			paginate
 				.init()
 				.on('ready', function(paginate){
-					test.ok(paginate.isOnFirstPage(), "Expecting to be on the first page" );
 					paginate.first(function(result){
+						test.ok(paginate.onFirstPage(), "Expecting to be on the first page" );
 						paginate.next(function(result){
-							test.ok(!paginate.isOnFirstPage(), "Expecting not to be on the first page" );
+							test.ok(!paginate.onFirstPage(), "Expecting not to be on the first page" );
 							test.done();
 						});
 					});
@@ -190,7 +190,7 @@ module.exports = {
 		},
 
 		'test lastPage method': function(test){
-			test.expect(1);
+			test.expect(4);
 			var paginate = new(PageFire)(test_ref, PAGE_SIZE);
 			paginate
 				.init()
@@ -199,10 +199,16 @@ module.exports = {
 						var keys = Object.keys(result);
 						test.ok(typeof result === 'object', "expecting object");
 						test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
-						test.equals(result[keys[PAGE_SIZE-1]].surname, testData[testData.length-1].surname, "expecting the newest item be the first item in the list");
-						test.equals(result[keys[0]].surname, testData[testData.length -1 - NEW_ITEMS].surname, "the last item on page is the fith item from the first");
+						test.equals(result[keys[PAGE_SIZE-1]].surname, testData[NEW_ITEMS].surname, "expecting the newest item be the first item in the list");
+						test.equals(result[keys[0]].surname, testData[0].surname, "the last item on page is the fith item from the first");
+						test.done();
 					});
 				});
+		},
+
+		'Press Ctrl-C to kill the Firebase connection' : function(test){
+			test.done();
 		}
   }
 };
+
