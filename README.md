@@ -1,17 +1,27 @@
 # pagefire
 
 paginator for firebase endless ordered list
+While it probably can be used as moodule on client side it is designed
+to work on node.js server to create API. Originally ot was a part of a bigger
+private project, but I thought this small part could be shared. 
 
 ## Getting Started
 Install the module with: `npm install pagefire`
 
 ```javascript
-var pagefire = require('pagefire');
-pagefire.awesome(); // "awesome"
+var Pagefire = require('pagefire');
+
+var pagefire = new(PageFire)(firebase_ref, SET_PAGE_SIZE);
+pagefire
+	.init()
+	.on('ready',function(){});
+
+
 ```
 
 ## Documentation
-_(Coming soon)_
+PageFire needs to be initialized with valid Firebase reference. The application can have multiple instances of PageFires for different Firebase url.
+.init initializes the pagefire and set the newest item on the list. PigeFire inhertits from EventEmitter so when the initialization is ready the 'ready' event is emitted.
 
 ## Examples
 _(Coming soon)_
