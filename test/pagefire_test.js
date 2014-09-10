@@ -171,6 +171,38 @@ module.exports = {
 
 					});
 				});
+		},
+
+		'test isOnFirstPaage isOnLastPage methods': function(test) {
+			test.expect(2);
+			var paginate = new(PageFire)(test_ref, PAGE_SIZE);
+			paginate
+				.init()
+				.on('ready', function(paginate){
+					test.ok(paginate.isOnFirstPage(), "Expecting to be on the first page" );
+					paginate.first(function(result){
+						paginate.next(function(result){
+							test.ok(!paginate.isOnFirstPage(), "Expecting not to be on the first page" );
+							test.done();
+						});
+					});
+				});
+		},
+
+		'test lastPage method': function(test){
+			test.expect(1);
+			var paginate = new(PageFire)(test_ref, PAGE_SIZE);
+			paginate
+				.init()
+				.on('ready', function(paginate){
+					paginate.last(function(result){
+						var keys = Object.keys(result);
+						test.ok(typeof result === 'object', "expecting object");
+						test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
+						test.equals(result[keys[PAGE_SIZE-1]].surname, testData[testData.length-1].surname, "expecting the newest item be the first item in the list");
+						test.equals(result[keys[0]].surname, testData[testData.length -1 - NEW_ITEMS].surname, "the last item on page is the fith item from the first");
+					});
+				});
 		}
   }
 };
