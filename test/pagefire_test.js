@@ -29,7 +29,6 @@ var PageFire = require('../lib/pagefire.js');
  */
 var test_ref = new Firebase('https://sagavera.firebaseio.com/pageFireTest');
 
-var PageFireTests;
 //TODO - fix the following
 // make sure PAGE_SIZE is small enough to have at least 2 pages in testing set. otherwise the dest will fail
 var PAGE_SIZE = 5, NEW_ITEMS = PAGE_SIZE -1;
@@ -54,8 +53,6 @@ var testData = [
 	{name:"Babe", surname:"Stevensen"}
 	];
 
-var testItem = 1; //looking to get Kenny McCormic, this will be replaced with auto_id string
-
 var allIds = new(Array);  // this is going to hold all new test IDs
 
 
@@ -63,8 +60,8 @@ function init(cb){
 	test_ref.remove(function(){
 		var counter = testData.length;
 		allIds = new(Array);
-		testData.forEach(function(item,index){
-			var item_ref = test_ref.push(item,function(obj){
+		testData.forEach(function(item){
+			var item_ref = test_ref.push(item,function(){
 				counter--;
 				if (counter === 0 ) {
 					cb();
@@ -150,7 +147,7 @@ module.exports = {
 			paginate
 				.init()
 				.on('ready', function(paginate){
-					paginate.first(function(result){
+					paginate.first(function(){
 
 						var modulo = testData.length % NEW_ITEMS;
 
@@ -158,10 +155,10 @@ module.exports = {
 							obj.next(function(result){
 								var keys = Object.keys(result);
 								//console.log(keys.length, PAGE_SIZE);
-								if (keys.length == PAGE_SIZE ) {
+								if (keys.length === PAGE_SIZE ) {
 									func(obj);
 								} else {
-									test.ok(keys.length == modulo, "should be on page '" + modulo + "' items and got " + keys.length);
+									test.ok(keys.length === modulo, "should be on page '" + modulo + "' items and got " + keys.length);
 									test.done();
 								}
 							});
@@ -179,9 +176,9 @@ module.exports = {
 			paginate
 				.init()
 				.on('ready', function(paginate){
-					paginate.first(function(result){
+					paginate.first(function(){
 						test.ok(paginate.onFirstPage(), "Expecting to be on the first page" );
-						paginate.next(function(result){
+						paginate.next(function(){
 							test.ok(!paginate.onFirstPage(), "Expecting not to be on the first page" );
 							test.done();
 						});
