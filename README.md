@@ -23,6 +23,8 @@ pagefire
 PageFire needs to be initialized with valid Firebase reference. The application can have multiple instances of PageFires for different Firebase url.
 .init initializes the pagefire and set the newest item on the list. PigeFire inhertits from EventEmitter so when the initialization is ready the 'ready' event is emitted.
 
+Original Idea was to implement Promises but with events with works as well.
+
 ## Examples
 _(Coming soon)_
 

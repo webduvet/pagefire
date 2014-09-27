@@ -57,6 +57,7 @@ var allIds = new(Array);  // this is going to hold all new test IDs
 
 
 function init(cb){
+	//clean the database and resinsert the test data
 	test_ref.remove(function(){
 		var counter = testData.length;
 		allIds = new(Array);
@@ -68,10 +69,6 @@ function init(cb){
 				}
 			});
 			allIds.push(item_ref.name());
-			//console.log(item_ref.name());
-			//item_ref.on('child_added', function(c){
-			//	console.log(c.val());
-			//});
 		});
 	});
 }
