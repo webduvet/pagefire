@@ -103,6 +103,21 @@ module.exports = {
 				});
 		},
 
+		'simple approach test without any init, promises': function(test) {
+			var paginate = new(PageFire)(test_ref, PAGE_SIZE);
+			paginate.next()
+				.then(function(results){
+					var keys = Object.keys(result);
+					test.ok(typeof result === 'object', "expecting object");
+					test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
+					test.equals(result[keys[PAGE_SIZE-1]].surname, testData[testData.length-1].surname, "expecting the newest item be the first item in the list");
+					test.equals(result[keys[0]].surname, testData[testData.length -1 - NEW_ITEMS].surname, "the last item on page is the fith item from the first");
+				}, function(results){
+					console.log("something went wrong");
+				});
+		},
+
+
 		'test get first page, get nextPage and get Previous Page' : function(test) {
 			test.expect(12);
 			var paginate = new(PageFire)(test_ref, PAGE_SIZE);
