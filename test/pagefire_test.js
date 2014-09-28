@@ -96,7 +96,7 @@ module.exports = {
       var paginate = new(PageFire)(test_ref);
 
 			paginate
-				.init()
+				.setNewest()
 				.on('ready', function(paginate){
 					test.equals(paginate._newest, allIds[allIds.length-1], "expecting the newest key in the list, got this: " + paginate._newest);	
 					test.done();
