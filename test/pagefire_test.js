@@ -57,14 +57,14 @@ var testData = [
 	{name:"Babe", surname:"Stevensen"}
 	];
 
-var allIds = new(Array);  // this is going to hold all new test IDs
+var allIds = new (Array)();  // this is going to hold all new test IDs
 
 
 function init(cb){
 	//clean the database and resinsert the test data
 	test_ref.remove(function(){
 		var counter = testData.length;
-		allIds = new(Array);
+		allIds = new(Array)();
 		testData.forEach(function(item){
 			var item_ref = test_ref.push(item,function(){
 				counter--;
