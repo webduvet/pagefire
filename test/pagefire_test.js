@@ -123,42 +123,44 @@ module.exports = {
 				});
 		},
 
-/*
 		'test get first page, get nextPage and get Previous Page' : function(test) {
 			test.expect(12);
 			var paginate = new(PageFire)(test_ref, PAGE_SIZE);
-			paginate
-				.init()
-				.on('ready', function(paginate){
-					paginate.first(function(result){
-						var keys = Object.keys(result);
-						test.ok(typeof result === 'object', "expecting object");
-						test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
-						test.equals(result[keys[PAGE_SIZE-1]].surname, testData[testData.length-1].surname, "expecting the newest item be the first item in the list");
-						test.equals(result[keys[0]].surname, testData[testData.length -1 - NEW_ITEMS].surname, "the last item on page is the fith item from the first");
 
-						paginate.next(function(result){
+			paginate.next()
+				.then(function(result){
+					var keys = Object.keys(result);
+					test.ok(typeof result === 'object', "expecting object");
+					test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
+					test.equals(result[keys[PAGE_SIZE-1]].surname, testData[testData.length-1].surname, "expecting the newest item be the first item in the list");
+					test.equals(result[keys[0]].surname, testData[testData.length -1 - NEW_ITEMS].surname, "the last item on page is the fith item from the first");
+
+					paginate.next()
+						.then(function(result){
 							var keys = Object.keys(result);
 							test.ok(typeof result === 'object', "expecting object");
 							test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
 							test.equals(result[keys[PAGE_SIZE-1]].surname, testData[testData.length - 1 - NEW_ITEMS].surname, "expecting the newest item from next page  be the first item in the list");
 							test.equals(result[keys[0]].surname, testData[testData.length-1 - 2*NEW_ITEMS].surname, "the last item on next page is the fith item from the first");
 
-							paginate.previous(function(result){
-								var keys = Object.keys(result);
-								test.ok(typeof result === 'object', "expecting object");
-								test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
-								test.equals(result[keys[PAGE_SIZE-1]].surname, testData[testData.length-1].surname, "expecting the newest item be the first item in the list");
-								test.equals(result[keys[0]].surname, testData[testData.length -1 - NEW_ITEMS].surname, "the last item on page is the fith item from the first");
+							paginate.previous()
+								.then(function(result){
+									var keys = Object.keys(result);
+									test.ok(typeof result === 'object', "expecting object");
+									test.equals(keys.length, PAGE_SIZE, "expecting '" + PAGE_SIZE + "' results ang got "+ keys.length);
+									test.equals(result[keys[PAGE_SIZE-1]].surname, testData[testData.length-1].surname, "expecting the newest item be the first item in the list");
+									test.equals(result[keys[0]].surname, testData[testData.length -1 - NEW_ITEMS].surname, "the last item on page is the fith item from the first");
 
-								test.done();
-							});
+									test.done();
+								});
 						});
-
-					});
+				}, function(result){
+					console.log("rejected call", result);
+					test.done();
 				});
 		},
 
+/*
 		'test getting to the last possible page': function(test) {
 			test.expect(1);
 			var paginate = new(PageFire)(test_ref, PAGE_SIZE);
