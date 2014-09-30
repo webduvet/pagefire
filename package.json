@@ -37,6 +37,6 @@
   "keywords": [],
   "dependencies": {
     "firebase": "~1.0.21",
-		"rsvp": "~3.0.13",
+		"rsvp": "~3.0.13"
   }
 }
