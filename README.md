@@ -1,5 +1,7 @@
 # pagefire
 
+[![Build Status]]https://travis-ci.org/webduvet/pagefire.svg?branch=masteir]
+
 paginator for firebase endless ordered list
 While it probably can be used as moodule on client side it is designed
 to work on node.js server to create API. Originally ot was a part of a bigger
