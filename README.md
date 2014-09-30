@@ -15,6 +15,7 @@ var Pagefire = require('pagefire');
 
 var pagefire = new(PageFire)(firebase_ref, SET_PAGE_SIZE);
 pagefire
+	.next()
 	.then(function(page){}, function(reason){});
 
 
@@ -22,8 +23,14 @@ pagefire
 
 ## Documentation
 PageFire needs to be initialized with valid Firebase reference. The application can have multiple instances of PageFires for different Firebase url.
-.init initializes the pagefire and set the newest item on the list. PigeFire inhertits from EventEmitter so when the initialization is ready the 'ready' event is emitted.
+It can be instances of the same conection or diferent connection.
+.next() method returns promise to get the next page.  The last item of the previous page is always the first item of the last page.
+This is because firebase does not have queries for number of items in the list and the page can be queried either by priority or by id. Typically the push By ID list 
+is ordered by autoID with the latest item at the end. Pagefire lists the latest item as the first.
 
+later implementation will take options for latest first - last items as well as option to order the list by priorities.
+
+note:
 This is promise based verion. The original event - callback version is in v0.0.3.
 
 ## Examples
