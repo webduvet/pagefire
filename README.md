@@ -1,6 +1,6 @@
 # pagefire
 
-[![Build Status]](https://travis-ci.org/webduvet/pagefire.svg?branch=master)]
+[![Build Status](https://travis-ci.org/webduvet/pagefire.svg?branch=master)]
 
 paginator for firebase endless ordered list
 While it probably can be used as moodule on client side it is designed
